@@ -1,0 +1,1 @@
+// Főoldal, amely tartalmazza a megjelenítendő 4 terméket és a hozzá tartozó képet

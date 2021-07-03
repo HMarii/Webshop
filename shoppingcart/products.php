@@ -1,0 +1,1 @@
+// Segítségével lekérjük az összes terméket paginációval (pagination)
