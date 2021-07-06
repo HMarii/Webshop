@@ -32,5 +32,35 @@ if(isset($_POST['product_id'], $_POST['quantity'] && is_numeric($_POST['product_
     // A form újboli beküldésének a megakadályozása
     header('location: index.php?page=cart');
     exit;
+
+    // ELtávolítjuk a terméket a kosárból, megnézzük, hogy benne van-e az URL-ben a "remove" paraméter, ez a termék ID-je, megnézzük, hogy szám-e és, hogy a kosárban van-e
+    if(isset($_GET['remove'] && is_numeric($_GET['remove']) && isset($_SESSION['cart']) && isset($_SESSION['cart']['remove']))) {
+        unset($_SESSION['cart'][$_GET['remove']]);
+    }
+
+    // Frissítjük a termékek mennyiségét, ha a felhasználó az "Update" gombra kattint
+if (isset($_POST['update']) && isset($_SESSION['cart'])) {
+    // A POST adatjain végig megyünk, hogy az összes terméket frissítsük
+    foreach ($_POST as $k => $v) {
+        if (strpos($k, 'quantity') !== false && is_numeric($v)) {
+            $id = str_replace('quantity-', '', $k);
+            $quantity = (int)$v;
+            // Mindig ellenőrízzük és validáljuk
+            if (is_numeric($id) && isset($_SESSION['cart'][$id]) && $quantity > 0) {
+                // Új mennyiségre beállít
+                $_SESSION['cart'][$id] = $quantity;
+            }
+        }
+    }
+    // Form újboli elküldésének a megakadályozása
+    header('location: index.php?page=cart');
+    exit;
+}
+
+// Átirányítjuk a felhasználót a megrendelés oldalra, ha a megrendelés gombra kattint
+if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    header('Location: index.php?page=placeorder');
+    exit;
+}
 }
 ?>
