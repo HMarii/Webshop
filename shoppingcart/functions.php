@@ -18,6 +18,10 @@ function pdo_connect_mysql() {
 //Template fejléc
 
 function template_header($title) {
+
+    // Lekérjük a kosárban levő elemek számát, ez lesz a fejlécben
+    $num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;   
+
     echo <<<EOT
     <!DOCTYPE html>
         <html>
@@ -38,6 +42,7 @@ function template_header($title) {
             <div class="link-icons">
                 <a href="index.php?page=cart">
                     <i class="fas fa-shopping-cart"></i>
+                    <span>$num_items_in_cart</span>
                 </a>
             </div>
         </div>
