@@ -34,7 +34,7 @@ function template_header($title) {
 	    <body>
         <header>
         <div class="content-wrapper">
-            <h1>Webshop</h1>
+            <h1>StoneNailShop</h1>
             <nav>
                 <a href="index.php">Főoldal</a>
                 <a href="index.php?page=products">Termékek</a>
@@ -57,7 +57,7 @@ function template_footer() {
         </main>
         <footer>
             <div class="content-wrapper">
-                <p>&copy; $year, Webshop</p>
+                <p>&copy; $year, StoneNailShop</p>
             </div>
         </footer>
         <script src="script.js"></script>
