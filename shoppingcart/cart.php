@@ -1,86 +1,83 @@
 <?php
-
-// A kosár oldal, amely tartalmazza az összes terméket, amelyeket a felhasználó hozzáadott. Láthatjuk a végösszeget is.
-// Ha a felh. ráklikkel a "Kosárba" gombra a "Termékek" oldalon, akkor ellenőrízhetjük a form adatokat
-
-if(isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['product_id']) && is_numeric($_POST['quantity'])) {
-    // Beállítjuk a POST változókat, hogy könnyedén azonosítsuk őket, muszáj integereknek lenniük
+// If the user clicked the add to cart button on the product page we can check for the form data
+if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['product_id']) && is_numeric($_POST['quantity'])) {
+    // Set the post variables so we easily identify them, also make sure they are integer
     $product_id = (int)$_POST['product_id'];
     $quantity = (int)$_POST['quantity'];
-    // Előkészítjük az SQL lekérdezést, igazából megnézzük, hogy létezik-e a termék a DB-ben
-    $stmt = $pdo->prepare('SELECT * from products WHERE id =?');
-    $stmt->execute($_POST['product_id']);
-    // Fetcheljük a terméket a DB-ből és tömblént visszaadjuk
-    $product=$stmt->fetch(PDO::FETCH_ASSOC);
-    // Megnézzük, hogy nem-e üres a tömb (A termék létezik)
-    if($product && $quantity > 0) {
-        // A termék létezik a DB-ben, most frissíthetjük a session változót a kosárban
-        if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
-            if(array_key_exists($product_id && $_SESSION['cart'])) {
-                // A termék létezik a kosárban, szóval csak frissíteni kell a mennyiséget
+    // Prepare the SQL statement, we basically are checking if the product exists in our databaser
+    $stmt = $pdo->prepare('SELECT * FROM products WHERE id = ?');
+    $stmt->execute([$_POST['product_id']]);
+    // Fetch the product from the database and return the result as an Array
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Check if the product exists (array is not empty)
+    if ($product && $quantity > 0) {
+        // Product exists in database, now we can create/update the session variable for the cart
+        if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+            if (array_key_exists($product_id, $_SESSION['cart'])) {
+                // Product exists in cart so just update the quanity
                 $_SESSION['cart'][$product_id] += $quantity;
             } else {
-                // A termék nincs a kosrában, ezért hozzáadjuk
+                // Product is not in cart so add it
                 $_SESSION['cart'][$product_id] = $quantity;
             }
         } else {
-            // Nincs termék a kosrában, ezért hozzáadjuk az első terméket a kosárba
+            // There are no products in cart, this will add the first product to cart
             $_SESSION['cart'] = array($product_id => $quantity);
-
         }
     }
-    // A form újboli beküldésének a megakadályozása
+    // Prevent form resubmission...
     header('location: index.php?page=cart');
     exit;
 }
-    // ELtávolítjuk a terméket a kosárból, megnézzük, hogy benne van-e az URL-ben a "remove" paraméter, ez a termék ID-je, megnézzük, hogy szám-e és, hogy a kosárban van-e
-    if(isset($_GET['remove']) && is_numeric($_GET['remove']) && isset($_SESSION['cart']) && isset($_SESSION['cart']['remove'])) {
-        unset($_SESSION['cart'][$_GET['remove']]);
-    }
 
-    // Frissítjük a termékek mennyiségét, ha a felhasználó az "Update" gombra kattint
+// Remove product from cart, check for the URL param "remove", this is the product id, make sure it's a number and check if it's in the cart
+if (isset($_GET['remove']) && is_numeric($_GET['remove']) && isset($_SESSION['cart']) && isset($_SESSION['cart'][$_GET['remove']])) {
+    // Remove the product from the shopping cart
+    unset($_SESSION['cart'][$_GET['remove']]);
+}
+
+// Update product quantities in cart if the user clicks the "Update" button on the shopping cart page
 if (isset($_POST['update']) && isset($_SESSION['cart'])) {
-    // A POST adatjain végig megyünk, hogy az összes terméket frissítsük
+    // Loop through the post data so we can update the quantities for every product in cart
     foreach ($_POST as $k => $v) {
         if (strpos($k, 'quantity') !== false && is_numeric($v)) {
             $id = str_replace('quantity-', '', $k);
             $quantity = (int)$v;
-            // Mindig ellenőrízzük és validáljuk
+            // Always do checks and validation
             if (is_numeric($id) && isset($_SESSION['cart'][$id]) && $quantity > 0) {
-                // Új mennyiségre beállít
+                // Update new quantity
                 $_SESSION['cart'][$id] = $quantity;
             }
         }
     }
-    // Form újboli elküldésének a megakadályozása
+    // Prevent form resubmission...
     header('location: index.php?page=cart');
     exit;
 }
 
-// Átirányítjuk a felhasználót a megrendelés oldalra, ha a megrendelés gombra kattint
+// Send the user to the place order page if they click the Place Order button, also the cart should not be empty
 if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
     header('Location: index.php?page=placeorder');
     exit;
 }
 
-//Megnézzük a SESSION változót, hogy vannak-e a kosárban termékek
+// Check the session variable for products in cart
 $products_in_cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : array();
 $products = array();
-$subtotal = 0;
-
-// Ha vannak termékek a kosárban
-if($products_in_cart) {
-    // Vannak termékek a kosárban, szóval le kell kérnünk őket a DB-ből
-    // A termékeket a kosárban kérdőjeles string tömbbé kell alakítani az SQL utasítás miatt (?, ?)
+$subtotal = 0.00;
+// If there are products in cart
+if ($products_in_cart) {
+    // There are products in the cart so we need to select those products from the database
+    // Products in cart array to question mark string array, we need the SQL statement to include IN (?,?,?,...etc)
     $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
-    $stmt = $pdo->prepare('SELECT * FROM products WHERE ID in (' . $array_to_question_marks . ')');
-    // Csak a tömbnek a kulcsai kellenek, nem az értékei, mivel a kulcsok a termékeknek az azonosítója
+    $stmt = $pdo->prepare('SELECT * FROM products WHERE id IN (' . $array_to_question_marks . ')');
+    // We only need the array keys, not the values, the keys are the id's of the products
     $stmt->execute(array_keys($products_in_cart));
-    // Fetcheljük a termékeket a DB-ből és visszaadjuk őket egy tömbben
+    // Fetch the products from the database and return the result as an Array
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // Kiszámítjuk a végösszeget
-    foreach($products as $product) {
-        $subtotal += $product['price'] * (int)$products_in_cart[$product['id']];
+    // Calculate the subtotal
+    foreach ($products as $product) {
+        $subtotal += (float)$product['price'] * (int)$products_in_cart[$product['id']];
     }
 }
 ?>
@@ -88,7 +85,7 @@ if($products_in_cart) {
 <?=template_header('Cart')?>
 
 <div class="cart content-wrapper">
-    <h1>Kosár</h1>
+    <h1>Shopping Cart</h1>
     <form action="index.php?page=cart" method="post">
         <table>
             <thead>
@@ -96,7 +93,7 @@ if($products_in_cart) {
                     <td colspan="2">Termék</td>
                     <td>Ár</td>
                     <td>Mennyiség</td>
-                    <td>Végösszeg</td>
+                    <td>Összesen</td>
                 </tr>
             </thead>
             <tbody>
