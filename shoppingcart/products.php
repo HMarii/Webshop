@@ -26,7 +26,7 @@ $total_products = $pdo->query('SELECT * from products')->rowCount();
 
 <div class="products content-wrapper">
     <h1>Termékek</h1>
-    <p><?=$total_products?> Termékek</p>
+    <p><?=$total_products?> Termék</p>
     <div class="products-wrapper">
         <?php foreach ($products as $product): ?>
         <a href="index.php?page=product&id=<?=$product['id']?>" class="product">

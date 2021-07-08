@@ -9,8 +9,8 @@ $recently_added_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?=template_header('Home')?>
 
 <div class="featured">
-    <h2>Eszközök</h2>
-    <p>Esszenciális eszközök mindennapi használatra</p>
+    <h2>Webáruház</h2>
+    <p>Olcsó, minőségi termékek, ingyenes házhozszállítással</p>
 </div>
 <div class="recentlyadded content-wrapper">
     <h2>Kiemelt termékek</h2>
