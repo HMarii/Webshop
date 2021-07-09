@@ -8,6 +8,31 @@
 html {
 	height: 100%;
 }
+
+.regcontent {
+	text-align: center;
+	margin: auto;
+	width: 75%;
+	padding: 1%;
+}
+
+.form-input {
+	padding: 1%;
+}
+
+.form-input label {
+	width: 50%;
+}
+
+input {
+	width: 100%;
+	padding: 15px;
+	margin: 10px 0 22px 0;
+	display: inline-block;
+	border: none;
+	background: #f1f1f1;
+  }
+
 body {
 	position: relative;
 	min-height: 100%;

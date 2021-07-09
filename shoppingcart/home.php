@@ -6,11 +6,11 @@ $stmt->execute();
 $recently_added_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<?=template_header('Home')?>
+<?=template_header('Főoldal')?>
 
 <div class="featured">
     <h2>StoneNailShop</h2>
-    <p>Kőszegi mnőségi termékek olcsón.</p>
+    <p>Kőszegi minőségi termékek olcsón.</p>
 </div>
 <div class="recentlyadded content-wrapper">
     <h2>Kiemelt termékek</h2>

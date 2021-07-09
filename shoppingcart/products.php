@@ -22,7 +22,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $total_products = $pdo->query('SELECT * from products')->rowCount();
 ?>
 
-<?=template_header('Products')?>
+<?=template_header('Termékek')?>
 
 <div class="products content-wrapper">
     <h1>Termékek</h1>

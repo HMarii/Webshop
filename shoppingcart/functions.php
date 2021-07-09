@@ -37,6 +37,8 @@ function template_header($title) {
             <h1>StoneNailShop</h1>
             <nav>
                 <a href="index.php">Főoldal</a>
+                <a href="index.php?page=login">Bejelentkezés</a>
+                <a href="index.php?page=register">Regisztráció</a>
                 <a href="index.php?page=products">Termékek</a>
             </nav>
             <div class="link-icons">
