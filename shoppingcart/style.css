@@ -334,11 +334,11 @@ main .cart .buttons {
 	text-align: right;
 	padding-bottom: 40px;
 }
-main .cart .buttons input[type="submit"] {
+.buttons input[type="submit"] {
 	margin-left: 5px;
 	padding: 12px 20px;
 	border: 0;
-	background: #4e5c70;
+	background: #4e5c70!important;
 	color: #FFFFFF;
 	font-size: 14px;
 	font-weight: bold;
