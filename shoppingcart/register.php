@@ -34,6 +34,7 @@
         }
 
         // Jelszó hashelése
+        // BCRYPT, mert biztonságosabb, mint az md5, sha1
         $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
 
         // Beszúró lekérdezés előkészítése
