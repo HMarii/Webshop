@@ -4,7 +4,6 @@ session_start();
 // Funkciók igénybe vétele és a db-hez csatlakozás PDO MySQL-el
 include 'functions.php';
 
-$pdo = pdo_connect_mysql();
 
 // Az oldal alapból a home-ra (home.php) van beállítva, szóval ezt az oldalt fogják először látni
 
