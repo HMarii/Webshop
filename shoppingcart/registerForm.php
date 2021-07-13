@@ -11,7 +11,7 @@
             </div>
             <div class="form-input">
             <label for="password">Jelszó </label>
-            <input type="password" name="email" placeholder="******" required>
+            <input type="password" name="password" placeholder="******" required>
             </div>
             <div class="form-input">
             <label for="fullname">Teljes név </label>
