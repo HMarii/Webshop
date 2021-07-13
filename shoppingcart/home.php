@@ -1,5 +1,6 @@
 <?php
 // Főoldal, amely tartalmazza a megjelenítendő 4 terméket és a hozzá tartozó képet
+require_once 'index.php';
 $stmt = $pdo->prepare('SELECT * from products ORDER BY created_at LIMIT 4');
 $stmt->execute();
 

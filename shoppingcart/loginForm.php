@@ -1,8 +1,20 @@
+
+
 <?=template_header('Bejelentkezés')?>
 
 
 <div class="regcontent">
     <h2>Bejelentkezési adatok</h2>
+    <?php 
+				if(isset($errors) && count($errors) > 0)
+				{
+
+					foreach($errors as $error_msg)
+					{
+						echo '<div class="alert alert-danger">'.$error_msg.'</div>';
+					}
+				}
+			?>
     <hr>
         <form action="login.php" method="post">
             <div class="form-input">
