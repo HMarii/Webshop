@@ -33,17 +33,33 @@ function template_header($title) {
             }
             echo "
                 <a href='index.php'>Főoldal</a>
-                <a href='index.php?page=loginForm'>Bejelentkezés</a>
-                <a href='index.php?page=registerForm'>Regisztráció</a>
+                ";
+                if(!isset($useremail)) {
+                echo "<a href='index.php?page=loginForm'>Bejelentkezés</a>
+                <a href='index.php?page=registerForm'>Regisztráció</a>";
+                }
+                echo "
                 <a href='index.php?page=products'>Termékek</a>
-                <a href='index.php?page=logout'>Kijelentkezés</a>
+                ";
+                if(isset($useremail)) {
+                echo '<a href="index.php?page=logout">Kijelentkezés</a>';
+                }
+                echo "
             </nav>
-            <div class='link-icons'>
+            
+            <div class='link-icons'>";
+            if(isset($useremail)) {
+                echo "
                 <a href='index.php?page=cart'>
                     <i class='fas fa-shopping-cart'></i>
                     <span>$num_items_in_cart</span>
                 </a>
+                ";
+            }
+            echo "
             </div>
+            
+            
         </div>
     </header>
     <main>
