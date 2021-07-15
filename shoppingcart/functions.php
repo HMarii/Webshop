@@ -2,12 +2,14 @@
 // Tartalmazza az összes funkciót, ami kell ehhez a rendszerhez (template fejléc, template lábléc, db csatlakozás)
 include 'dbconfig.php';
 //Template fejléc
-
+$useremail = "";
 function template_header($title) {
 
     // Lekérjük a kosárban levő elemek számát, ez lesz a fejlécben
     $num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;   
-
+    if(isset($_SESSION['user_email'])) {
+        $useremail = $_SESSION['user_email'];
+    }
     echo "
     <!DOCTYPE html>
         <html>
@@ -23,11 +25,18 @@ function template_header($title) {
             <h1>StoneNailShop</h1>
             
             
-            <nav>
+            
+            <nav>";
+            
+            if(isset($useremail)) {
+                echo '<a>'.$useremail.'</a>';
+            }
+            echo "
                 <a href='index.php'>Főoldal</a>
                 <a href='index.php?page=loginForm'>Bejelentkezés</a>
                 <a href='index.php?page=registerForm'>Regisztráció</a>
                 <a href='index.php?page=products'>Termékek</a>
+                <a href='index.php?page=logout'>Kijelentkezés</a>
             </nav>
             <div class='link-icons'>
                 <a href='index.php?page=cart'>
