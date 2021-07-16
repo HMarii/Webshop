@@ -28,6 +28,7 @@
 
         if(!$row) {
             echo "Helytelen email cím vagy jelszó!";
+            header("refresh:5;location:loginForm.php");
         } else {
             // A fiók létezik, megnézzük, hogy a jelszó valid
             // Jelszó összehasonlítása
@@ -46,6 +47,7 @@
                 // A jelszó helytelen, a belépés sikertelen
 
                 echo "Helytelen jelszó!";
+                header("refresh:5;location:loginForm.php");
                 exit();
             }
         }
