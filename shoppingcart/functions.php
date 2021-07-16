@@ -29,7 +29,7 @@ function template_header($title) {
             <nav>";
             
             if(isset($useremail)) {
-                echo '<a>'.$useremail.'</a>';
+                echo '<a href="#">'.$useremail.'</a>';
             }
             echo "
                 <a href='index.php'>Főoldal</a>

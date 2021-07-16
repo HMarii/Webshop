@@ -239,6 +239,21 @@ main > .product form input[type="submit"] {
 main > .product form input[type="submit"]:hover {
 	background: #434f61;
 }
+
+main > .product form #cartbutton[type="submit"] {
+	background: #4e5c70;
+	border: 0;
+	color: #FFFFFF;
+	width: 400px;
+	padding: 12px 0;
+	font-size: 14px;
+	font-weight: bold;
+	border-radius: 5px;
+	cursor: pointer;
+}
+main > .product form #cartbutton[type="submit"]:hover {
+	background: #434f61;
+}
 main > .products h1 {
 	display: block;
 	font-weight: normal;

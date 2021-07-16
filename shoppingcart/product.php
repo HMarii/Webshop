@@ -34,7 +34,7 @@ if(isset($_GET['id'])) {
             <form action="index.php?page=cart" method="post">
             <input type="number" name="quantity" value="1" min="1" max="<?=$product['quantity']?>" placeholder="Mennyiség" required>
             <input type="hidden" name="product_id" value="<?=$product['id']?>">
-            <input type="submit" value="Kosárba">
+            <button id="cartbutton" type="submit"><i class='fas fa-shopping-cart'> Kosárba</i></button>
         </form>
         <div class="description">
             <?=$product['description']?>

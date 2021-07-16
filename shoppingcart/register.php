@@ -30,6 +30,7 @@
         // Email foglalt, a regisztráció sikertelen.
         if($row['num'] > 0) {
             echo "Ez az email cím már létezik! Kérlek egy másikat adj meg!";
+            header("refresh:5;url=register.php");
             exit();
         }
 
@@ -54,6 +55,7 @@
 
         if($result) {
             echo "Sikeres regisztráció!";
+            header("refresh:5;url=home.php");
         }
 
     }
