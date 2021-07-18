@@ -1,5 +1,5 @@
 <?php
-    session_start();
+        session_start();
 
     require 'dbconfig.php';
     // Ha a "Regisztráció" gombra kattintunk
@@ -37,9 +37,10 @@
         // Jelszó hashelése
         // BCRYPT, mert biztonságosabb, mint az md5, sha1
         $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
-
+        // MD5 elég, mert a megerősítésnél lényegtelen a biztonság és gyorsabb is
+        $confirmHash = md5( rand(0,1000) );
         // Beszúró lekérdezés előkészítése
-        $sql = "INSERT INTO users (email, password, fullname, address) VALUES(:email, :password, :fullname, :address)";
+        $sql = "INSERT INTO users (email, password, fullname, address, hash) VALUES(:email, :password, :fullname, :address, :hash)";
         $stmt = $pdo->prepare($sql);
 
         //Bindelés
@@ -48,13 +49,38 @@
         $stmt->bindValue(":password", $passwordHash);
         $stmt->bindValue(":fullname", $fullname);
         $stmt->bindValue(":address", $address);
+        $stmt->bindValue(":hash", $confirmHash);
 
         //Lekérdezés lefuttatása 
 
         $result = $stmt->execute();
 
         if($result) {
-            echo "Sikeres regisztráció!";
+            echo "Sikeres regisztráció! Kérlek erősítsd meg a fiókodat az aktivációs linkre kattintva, amit az email fiókodban találsz meg!.";
+
+            // Elküldjük az aktivációs linket a megadott email címre
+            $to = $email;
+            $subject = 'Regisztrálás';
+
+            header('Content-Type: text/html; charset=utf-8'); 
+
+            $message = '
+                Köszönjük, hogy regisztráltál!
+                A fiókodat létrehoztuk, a link kattintása után be is tudsz jelentkezni!
+                -----------------------------------------------------------------------
+                Bejelentkezési adatok:
+                Email cím: '.$email.'
+                -----------------------------------------------------------------------
+                  
+                Kérlek kattints az alábbi linkre a fiókod aktiválásához!
+                http:////localhost/shop/Webshop/shoppingcart/verify.php?email='.$email.'&hash='.$confirmHash.'
+  
+                ';
+
+                $headers = 'Küldte: StoneNailShop@gmail.com' . "\r\n";
+                mail(utf8_decode($to), utf8_decode($subject), utf8_decode($message), utf8_decode($headers)); // Email elküldése
+            
+
             header("refresh:5;url=home.php");
         }
 
